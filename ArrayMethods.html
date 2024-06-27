@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("GET","https://restcountries.com/v3.1/all",true);
+
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status <= 300) {
+                const data = JSON.parse(xhr.responseText);
+
+                let details = [];
+
+                // Fetching countries from Asia region
+                let asiaCountries = data.filter(country => country.region === "Asia");
+                
+                console.log(asiaCountries);
+
+                // Getting countries with population less than 2 lakhs
+                let populationLimit = data.filter(country => country.population < 200000);
+
+                console.log(populationLimit);
+
+                // Printing the name, capital, flag using forEach method
+                data.forEach(country => {
+                    details.push({
+                        name: country.name,
+                        capital: country.capital,
+                        flag: country.flags.png,
+                    });
+                });
+                console.log(details);
+
+                // Printing the total population of countries using reduce method
+                let totalPopulation = data.reduce((acc, curr) => acc + curr.population, 0);
+
+                console.log(totalPopulation);
+
+                // Printing the country that uses the US dollars as currency
+                let usDollar = data.filter(country => country.currencies.USD.symbol == "$");
+
+                console.log(usDollar);
+            }
+        }
+
+        xhr.send();
+    </script>
+</body>
+</html>
